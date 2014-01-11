@@ -117,6 +117,7 @@ def save_items(items):
 			print "Downloading", i['title'], "..."
 			try:
 				time.sleep(1)
+				filename = filename.replace("\"", "\\\"")
 				os.system("wget -T 5 -c -t 5 -O \"" + filename + "\" \"" + i['url'] + "\"")
 			except Exception as e:
 				print "Could not retrieve the file", i['url'], e
