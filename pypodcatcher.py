@@ -105,6 +105,8 @@ def save_items(items):
 		filename = os.path.join(base_directory, filename)
 		ext = i['url'].split('.')
 		ext = ext[len(ext)-1]
+		if ext == "":
+			ext = ".mp3"
 		filename += "." + ext
 		filedir = os.path.dirname(filename)
 		if not os.path.isdir(filedir):
@@ -114,7 +116,7 @@ def save_items(items):
 		if not os.path.exists(filename):
 			print "Downloading", i['title'], "..."
 			try:
-				time.sleep(2)
+				time.sleep(1)
 				os.system("wget -T 5 -c -t 5 -O \"" + filename + "\" \"" + i['url'] + "\"")
 			except Exception as e:
 				print "Could not retrieve the file", i['url'], e
