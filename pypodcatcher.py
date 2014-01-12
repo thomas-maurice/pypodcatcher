@@ -128,7 +128,8 @@ def save_items(items):
 if __name__ == "__main__":
 	if len(sys.argv) == 2:
 		f = open(sys.argv[1])
-		feedlist = f.read().split("\n")
+		feedlist = f.read().replace('\r', '')
+		feedlist = feedlist.split("\n")
 		for i in feedlist:
 			l = parse_feed(i)
 			save_items(l)
