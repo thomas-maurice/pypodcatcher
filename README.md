@@ -15,7 +15,8 @@ the URLs of the XML podcast feeds, one by line.
 The ```<conf>``` file has a very simple syntax, for
 exemple if you want to download all the podcast in
 a ~/podcast directory you just write:
-    Directory ~/podcast
+    
+		Directory ~/podcast
 
 In the file.
 
