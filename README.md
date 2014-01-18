@@ -7,7 +7,7 @@
 ## Using the script
 Once you've downloaded the script, you can simply invoke
 the script via the commandline by typing :
-    ./pypodcatcher.py -f <feedlist> -c <config>
+    ./pypodcatcher.py -f feedlist -c config
 
 In the ```<feedlist>``` file, you just have to put
 the URLs of the XML podcast feeds, one by line.
