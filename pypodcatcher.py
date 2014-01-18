@@ -20,7 +20,14 @@
 	 
 """
 
-base_directory = '/home/thomas/pypodcatcher/podcast'
+import urllib2
+import sys
+import time
+import os
+from xml.dom import minidom
+from optparse import OptionParser
+
+base_directory = '~/podcast'
 """
 	The fileformat accept those parameters:
 		%C : Channel name
@@ -31,6 +38,8 @@ base_directory = '/home/thomas/pypodcatcher/podcast'
 """
 file_format = '%C/%Y %M/%D %T'
 
+base_directory =  os.path.expanduser(base_directory)
+
 __author__ = "Thomas Maurice"
 __copyright__ = "Copyright 2013, Thomas Maurice"
 __license__ = "WTFPL"
@@ -38,12 +47,6 @@ __version__ = "0.2"
 __maintainer__ = "Thomas Maurice"
 __email__ = "tmaurice59@gmail.com"
 __status__ = "Development"
-
-import urllib2
-import sys
-import time
-import os
-from xml.dom import minidom
 
 def parse_feed(feed):
 	"""
@@ -115,8 +118,8 @@ def save_items(items):
 		
 		if not os.path.exists(filename):
 			print "Downloading", i['title'], "..."
+			time.sleep(0.5)
 			try:
-				time.sleep(1)
 				filename = filename.replace("\"", "\\\"")
 				os.system("wget -T 5 -c -t 5 -O \"" + filename + "\" \"" + i['url'] + "\"")
 			except Exception as e:
@@ -124,14 +127,55 @@ def save_items(items):
 		else:
 			print filename, "already exists, skipping"
 
-
+def load_config(cfile):
+	"""
+		Loads the config file. If no file is loaded then
+		the default values will be used.
+	"""
+	global base_directory, file_format
+	try:
+		f = open(os.path.expanduser(cfile), "r")
+		conf = f.read()
+		f.close()
+		conf = conf.replace("\r", "")
+		conf = conf.replace("  ", " ")
+		conf = conf.split('\n')
+		for l in conf:
+			if l != "" and l[0] != '#':
+				l=l.split(" ")
+				while '' in l:
+					l.remove('')
+				if l[0].lower() == "directory":
+					base_directory = os.path.expanduser(" ".join(l[1:]))
+				if l[0].lower() == "fileformat":
+					file_format = " ".join(l[1:])
+	except Exception as e:
+		print "Could not load configuration... ", e
+		
 if __name__ == "__main__":
-	if len(sys.argv) == 2:
-		f = open(sys.argv[1])
-		feedlist = f.read().replace('\r', '')
-		feedlist = feedlist.split("\n")
-		for i in feedlist:
-			l = parse_feed(i)
-			save_items(l)
+	parser = OptionParser()
+	parser.add_option("-f", "--feeds", dest="feeds",
+			type="string",
+			help="File which contains the feed list",
+			metavar="FEEDFILE")
+	parser.add_option("-c", "--conf", dest="conf",
+			type="string",
+			help="Configuration file",
+			metavar="CFG")
+
+	(options, args) = parser.parse_args()
+	if not options.feeds:
+		print "Not enough arguments, type", sys.argv[0], "-h for help"
+		exit(0)
+		
+	if options.conf:
+		load_config(options.conf)
+			
+	f = open(options.feeds)
+	feedlist = f.read().replace('\r', '')
+	feedlist = feedlist.split("\n")
+	for i in feedlist:
+		l = parse_feed(i)
+		save_items(l)
 	
 	
