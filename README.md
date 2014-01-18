@@ -36,7 +36,7 @@ have a directory per radio broadcast, within this directory sort
 the podcasts by year and month and finally save the podcast with the
 day it came out plus it's title, my config file will be:
 
-  Directory ~/podcasts
-  FileFormat %C/%Y %M/%D %T
+    Directory ~/podcasts
+    FileFormat %C/%Y %M/%D %T
 
 As simple as that :)
