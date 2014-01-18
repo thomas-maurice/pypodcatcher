@@ -1,5 +1,6 @@
 # pypodcatcher
 ## Developpement information
+
  * Curent version: 0.3 might be slightly buggy
  * License: WTF Public License v2
  * Author: Thomas Maurice <tmaurice59@gmail.com>
@@ -27,6 +28,7 @@ you can declare a FileFormat variable in the ```<conf>``` file.
 The FileFormat variable is a path which will be appended to the
 Directory variable. It will be parsed and the variable part (marked
 as %C, %T, %M and so on) will be replaced as it follows:
+
  * %C : Channel, will be replaced by the radio show name
  * %Y : The year of the podcast
  * %M : The month of the podcast
@@ -38,7 +40,7 @@ have a directory per radio broadcast, within this directory sort
 the podcasts by year and month and finally save the podcast with the
 day it came out plus it's title, my config file will be:
 
-    Directory ~/podcasts
+    Directory ~/podcast
     FileFormat %C/%Y %M/%D %T
 
 As simple as that :)
