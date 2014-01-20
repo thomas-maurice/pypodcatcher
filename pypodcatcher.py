@@ -24,6 +24,7 @@ import urllib2
 import sys
 import time
 import os
+import subprocess
 from xml.dom import minidom
 from optparse import OptionParser
 
@@ -59,6 +60,9 @@ def parse_feed(feed):
 		 
 		 In the input parameter 'feed' shall be put the URL of
 		 the XML feed to parse
+
+		Arguments:
+		 feed -- The feed link to open
 	"""
 	
 	item_list = []
@@ -121,7 +125,10 @@ def save_items(items):
 			time.sleep(0.5)
 			try:
 				filename = filename.replace("\"", "\\\"")
-				os.system("wget -T 5 -c -t 5 -O \"" + filename + "\" \"" + i['url'] + "\"")
+				commande = "wget -T 5 -c -t 5 -O \"" + filename + "\" \"" + i['url'] + "\""
+				p = subprocess.Popen([commande], shell=True, bufsize=2048, close_fds=True, stdout=sys.stdout)
+				while p.poll() == None:
+					time.sleep(0.1)
 			except Exception as e:
 				print "Could not retrieve the file", i['url'], e
 		else:
@@ -131,6 +138,8 @@ def load_config(cfile):
 	"""
 		Loads the config file. If no file is loaded then
 		the default values will be used.
+		Arguments:
+		 cfile -- The filename to open
 	"""
 	global base_directory, file_format
 	try:
